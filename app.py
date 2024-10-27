@@ -343,3 +343,18 @@ def calc_default():
 @app.route('/lab2/calc/<int:a>')
 def calc_redirect(a):
     return redirect(url_for('calc', a=a, b=1))
+books = [
+    {"author": "Чак Паланик", "title": "Бойцовский клуб", "genre": "Контркультура", "pages": 190},
+    {"author": "Мерседес Рон", "title": "Слоновая кость", "genre": "Роман", "pages": 245},
+    {"author": "Лев Толстой", "title": "Война и мир", "genre": "Роман", "pages": 1274},
+    {"author": "Фёдор Достоевский", "title": "Преступление и наказание", "genre": "Роман", "pages": 640},
+    {"author": "Надежда Мамаева", "title": "Ты просто огонь!", "genre": "Роман", "pages": 200},
+    {"author": "Даня Зевс", "title": "Путь к победе", "genre": "Легенда", "pages": 200},
+    {"author": "Николай Соболев", "title": "Путь к успеху", "genre": "Легенда", "pages": 150},
+    {"author": "Иван Тургенев", "title": "Отцы и дети", "genre": "Роман", "pages": 432},
+    {"author": "Беликов Вадим", "title": "Искусство курьера", "genre": "Стихи", "pages": 666},
+    {"author": "Максим Горький", "title": "Мать", "genre": "Роман", "pages": 370}
+]
+@app.route('/lab2/books/')
+def book_list():
+    return render_template('books.html', books=books)
