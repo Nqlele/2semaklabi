@@ -358,3 +358,13 @@ books = [
 @app.route('/lab2/books/')
 def book_list():
     return render_template('books.html', books=books)
+cars = [
+    {"title": "Bmw", "description": "M5", "image": "m5.jpg"},
+    {"title": "Bmw", "description": "X6", "image": "x6.jpg"},
+    {"title": "Bmw", "description": "I8", "image": "i8.jpg"},
+    {"title": "Bmw", "description": "M2", "image": "m2.jpg"},
+    {"title": "Bmw", "description": "X1", "image": "x1.jpg"}
+]
+@app.route('/lab2/cars/')
+def cars_list(): 
+    return render_template('cars.html', cars=cars)
