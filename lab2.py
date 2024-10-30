@@ -1,15 +1,14 @@
 from flask import Blueprint, redirect, url_for, render_template, request
+
 lab2 = Blueprint('lab2', __name__)
 
 @lab2.route('/lab2/a')
 def a():
     return 'без слэша'
 
-
 @lab2.route('/lab2/a/')
 def a2():
     return 'со слэшем'
-
 
 flower_list = [
     {'name': 'роза', 'price': 200},
@@ -20,12 +19,10 @@ flower_list = [
     {'name': 'гортензия', 'price': 220},
 ]
 
-
 @lab2.route('/lab2/flowers/')
 def list_flowers():
     flower_count = len(flower_list)
     return render_template('lab2/flowers.html', flower_list=flower_list, flower_count=flower_count)
-
 
 @lab2.route('/lab2/del_flower/<int:flower_id>')
 def del_flower(flower_id):
@@ -35,12 +32,10 @@ def del_flower(flower_id):
         flower_list.pop(flower_id)
         return redirect(url_for('list_flowers'))
 
-
 @lab2.route('/lab2/clear_flowers/')
 def clear_flowers():
     flower_list.clear()  # Очищаем список
     return render_template('lab2/flowers.html', flower_list=flower_list, flower_count=len(flower_list))
-
 
 @lab2.route('/lab2/add_flower/')
 def add_flower():
@@ -50,6 +45,7 @@ def add_flower():
         flower_list.append({"name": name, "price": price})
         return render_template('lab2/flowers.html', flower_list=flower_list, flower_count=len(flower_list))
     return 'Вы не задали имя цветка или его цену', 400
+
 @lab2.route('/lab2/example')
 def example():
     name, number_lab, group_student, number_course = 'Еремин Захар', 2, 'ФБИ-24', 3
@@ -63,18 +59,19 @@ def example():
     return render_template('lab2/example.html', name=name, number_lab=number_lab,
                            group_student=group_student, number_course=number_course,
                            fruits=fruits)
+
 @lab2.route('/lab2/')
-def lab2():
+def lab2_home():  # Переименовано для избежания конфликта
     return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('lab2/filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase=phrase)
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b): 
-    sum = a + b
+    sum_result = a + b
     razn = a - b
     umn = a * b
     dele = a / b if b != 0 else 'деление на 0'
@@ -84,7 +81,7 @@ def calc(a, b):
 <html>
     <body>
         <h1>Расчёт с параметрами:</h1>
-        <p>Сумма: {a} + {b} = {sum}</p>
+        <p>Сумма: {a} + {b} = {sum_result}</p>
         <p>Разность: {a} - {b} = {razn}</p>
         <p>Умножение: {a} X {b} = {umn}</p>
         <p>Деление: {a} / {b} = {dele}</p>
@@ -92,12 +89,15 @@ def calc(a, b):
     </body>
 </html>
 '''
+
 @lab2.route('/lab2/calc/')
 def calc_default():
     return redirect('/lab2/calc/1/1')
+
 @lab2.route('/lab2/calc/<int:a>')
 def calc_redirect(a):
     return redirect(url_for('calc', a=a, b=1))
+
 books = [
     {"author": "Чак Паланик", "title": "Бойцовский клуб", "genre": "Контркультура", "pages": 190},
     {"author": "Мерседес Рон", "title": "Слоновая кость", "genre": "Роман", "pages": 245},
@@ -110,9 +110,11 @@ books = [
     {"author": "Беликов Вадим", "title": "Искусство курьера", "genre": "Стихи", "pages": 666},
     {"author": "Максим Горький", "title": "Мать", "genre": "Роман", "pages": 370}
 ]
+
 @lab2.route('/lab2/books/')
 def book_list():
     return render_template('lab2/books.html', books=books)
+
 cars = [
     {"title": "Bmw", "description": "M5", "image": "lab2/m5.jpg"},
     {"title": "Bmw", "description": "X6", "image": "lab2/x6.jpg"},
@@ -120,6 +122,7 @@ cars = [
     {"title": "Bmw", "description": "M2", "image": "lab2/m2.jpg"},
     {"title": "Bmw", "description": "X1", "image": "lab2/x1.jpg"}
 ]
+
 @lab2.route('/lab2/cars/')
 def cars_list(): 
     return render_template('lab2/cars.html', cars=cars)
