@@ -17,12 +17,12 @@
         }
     </style>
     <body>
-        <h1>Список машин</h1>
+        <h1>Список Машин</h1>
         {% for car in cars %}
             <div>
-                <h2>{{ cars.title }}</h2>
-                <p>{{ cars.description }}</p>
-                <img src="{{ url_for('static', filename=cars.image) }}" alt="{{ cars.title }}">
+                <h2>{{ car.title }}</h2>
+                <p>{{ car.description }}</p>
+                <img src="{{ url_for('static', filename=car.image) }}" alt="{{ car.title }}">
             </div>
         {% endfor %}
     </body>
