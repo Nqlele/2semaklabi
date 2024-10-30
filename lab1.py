@@ -1,7 +1,8 @@
 from flask import Blueprint, url_for
 lab1 = Blueprint('lab1', __name__)
-@app.route("/lab1")
-def lab1():
+
+@lab1.route("/lab1")
+def lab():
     return """
 <!DOCTYPE html>
 <html>
@@ -41,7 +42,7 @@ def lab1():
 </html>
 """
 
-@app.route("/lab1/oak")
+@lab1.route("/lab1/oak")
 def oak():
     return '''
 <!DOCTYPE html>
@@ -67,7 +68,7 @@ def oak():
 </html>
 '''
 
-@app.route("/lab1/student")
+@lab1.route("/lab1/student")
 def student():
     return '''
 <!DOCTYPE html>
@@ -95,7 +96,7 @@ def student():
 </html>
 '''
 
-@app.route("/lab1/python")
+@lab1.route("/lab1/python")
 def python():
     return '''
 <!DOCTYPE html>
@@ -147,7 +148,7 @@ def python():
 </html>
 '''
 
-@app.route("/lab1/monesy")
+@lab1.route("/lab1/monesy")
 def monesy():
     return '''
 <!DOCTYPE html>

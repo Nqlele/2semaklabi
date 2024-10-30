@@ -1,13 +1,14 @@
 from flask import Blueprint, redirect, url_for, render_template, request
 lab2 = Blueprint('lab2', __name__)
-@app.route('/lab2/a')
+@lab2.route('/lab2/a')
 def a():
     return 'без слэша'
-@app.route('/lab2/a/')
+
+@lab2.route('/lab2/a/')
 def a2():
     return 'со слэшем'
 flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
-@app.route('/lab2/flowers/<int:flower_id>')
+@lab2.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
         return f'''
@@ -31,7 +32,7 @@ def flowers(flower_id):
     </body>
 </html>
 '''
-@app.route('/lab2/add_flower/<name>')
+@lab2.route('/lab2/add_flower/<name>')
 def add_flower(name):
     flower_list.append(name)
     return f'''
@@ -45,14 +46,14 @@ def add_flower(name):
     </body>
 </html>
 '''
-@app.route('/lab2/add_flower/')
+@lab2.route('/lab2/add_flower/')
 def add_flower_without_name():
     return 'нет имени цветка', 400
-@app.route('/lab2/flowers/')
+@lab2.route('/lab2/flowers/')
 def list_flowers():
     flower_count = len(flower_list)
     return render_template('flowers.html', flower_list=flower_list, flower_count=flower_count)
-@app.route('/lab2/clear_flowers/')
+@lab2.route('/lab2/clear_flowers/')
 def clear_flowers():
     flower_list.clear() 
     return f'''
@@ -65,7 +66,7 @@ def clear_flowers():
     </body>
 </html>
 '''
-@app.route('/lab2/example')
+@lab2.route('/lab2/example')
 def example():
     name, number_lab, group_student, number_course = 'Еремин Захар', 2, 'ФБИ-24', 3
     fruits = [
@@ -78,16 +79,16 @@ def example():
     return render_template('example.html', name=name, number_lab=number_lab,
                            group_student=group_student, number_course=number_course,
                            fruits=fruits)
-@app.route('/lab2/')
+@lab2.route('/lab2/')
 def lab2():
     return render_template('lab2.html')
 
-@app.route('/lab2/filters')
+@lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase = phrase)
 
-@app.route('/lab2/calc/<int:a>/<int:b>')
+@lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b): 
     sum = a + b
     razn = a - b
@@ -107,10 +108,10 @@ def calc(a, b):
     </body>
 </html>
 '''
-@app.route('/lab2/calc/')
+@lab2.route('/lab2/calc/')
 def calc_default():
     return redirect('/lab2/calc/1/1')
-@app.route('/lab2/calc/<int:a>')
+@lab2.route('/lab2/calc/<int:a>')
 def calc_redirect(a):
     return redirect(url_for('calc', a=a, b=1))
 books = [
@@ -125,7 +126,7 @@ books = [
     {"author": "Беликов Вадим", "title": "Искусство курьера", "genre": "Стихи", "pages": 666},
     {"author": "Максим Горький", "title": "Мать", "genre": "Роман", "pages": 370}
 ]
-@app.route('/lab2/books/')
+@lab2.route('/lab2/books/')
 def book_list():
     return render_template('books.html', books=books)
 cars = [
@@ -135,6 +136,6 @@ cars = [
     {"title": "Bmw", "description": "M2", "image": "m2.jpg"},
     {"title": "Bmw", "description": "X1", "image": "x1.jpg"}
 ]
-@app.route('/lab2/cars/')
+@lab2.route('/lab2/cars/')
 def cars_list(): 
     return render_template('cars.html', cars=cars)
