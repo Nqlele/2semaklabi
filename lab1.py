@@ -48,7 +48,7 @@ def oak():
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
         <title>Лабораторная 1. Дуб</title>
     </head>
     <body>
@@ -58,7 +58,7 @@ def oak():
         <main>
             <div>
                 <h1>Дуб</h1>
-                <img src="''' + url_for('static', filename='oak.jpg') + '''">
+                 <img src="''' + url_for('static', filename='lab1/oak.jpg') + '''">
             </div>
         </main>
         <footer>
@@ -74,7 +74,7 @@ def student():
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
         <title>Лабораторная 1. Студент</title>
     </head>
     <body>
@@ -85,7 +85,7 @@ def student():
         <main>
             <div>
                 <h1>Еремин Захар Дмитриевич</h1>
-                <img src="''' + url_for('static', filename='ngtu.jpg') + '''">
+                <img src="''' + url_for('static', filename='lab1/logo_nstu.png') + '''">
             </div>
         </main>
 
@@ -102,7 +102,7 @@ def python():
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+        <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
         <title>Лабораторная 1. Python</title>
     </head>
     <body>
@@ -137,7 +137,7 @@ def python():
                 </p>
             </div>
             <div>
-                <img src="''' + url_for('static', filename='pyth.jpg') + '''">
+                <img src="''' + url_for('static', filename='lab1/python.jpg') + '''">
             </div>
         </main>
 
@@ -154,7 +154,7 @@ def monesy():
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="''' + url_for('static', filename='lab1.css') + '''">
+         <link rel="stylesheet" href="''' + url_for('static', filename='lab1/lab1.css') + '''">
         <title>Лабораторная 1. Илья "monesy" Осипов </title>
     </head>
     <body>
@@ -186,7 +186,7 @@ def monesy():
                 </p>
             </div>
             <div>
-                <img src="''' + url_for('static', filename='monesy.jpg') + '''">
+                <img src="''' + url_for('static', filename='lab1/holland.jpg') + '''">
             </div>
         </main>
 

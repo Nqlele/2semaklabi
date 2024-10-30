@@ -1,71 +1,55 @@
 from flask import Blueprint, redirect, url_for, render_template, request
 lab2 = Blueprint('lab2', __name__)
+
 @lab2.route('/lab2/a')
 def a():
     return 'без слэша'
 
+
 @lab2.route('/lab2/a/')
 def a2():
     return 'со слэшем'
-flower_list = ['роза', 'тюльпан', 'незабудка', 'ромашка']
-@lab2.route('/lab2/flowers/<int:flower_id>')
-def flowers(flower_id):
-    if flower_id >= len(flower_list):
-        return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Ошибка 404</h1>
-        <p>Цветка с таким номером нет</p>
-        <a href="/lab2/flowers/">Посмотреть все цветы</a>
-    </body>
-</html>
-''', 404
-    else:
-        return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Информация о цветке</h1>
-        <p>Цветок: {flower_list[flower_id]}</p>
-        <a href="/lab2/flowers/">Посмотреть все цветы</a>
-    </body>
-</html>
-'''
-@lab2.route('/lab2/add_flower/<name>')
-def add_flower(name):
-    flower_list.append(name)
-    return f'''
-<!doctype html>
-<html>
-    <body>
-    <h1>Добавлен новый цветок</h1>
-    <p>Название нового цветка: {name} </p>
-    <p>Всего цветов: {len(flower_list)}</p>
-    <p>Полный список: {flower_list}</p>
-    </body>
-</html>
-'''
-@lab2.route('/lab2/add_flower/')
-def add_flower_without_name():
-    return 'нет имени цветка', 400
+
+
+flower_list = [
+    {'name': 'роза', 'price': 200},
+    {'name': 'тюльпан', 'price': 200},
+    {'name': 'незабудка', 'price': 200},
+    {'name': 'ромашка', 'price': 200},
+    {'name': 'георгин', 'price': 200},
+    {'name': 'гортензия', 'price': 220},
+]
+
+
 @lab2.route('/lab2/flowers/')
 def list_flowers():
     flower_count = len(flower_list)
-    return render_template('flowers.html', flower_list=flower_list, flower_count=flower_count)
+    return render_template('lab2/flowers.html', flower_list=flower_list, flower_count=flower_count)
+
+
+@lab2.route('/lab2/del_flower/<int:flower_id>')
+def del_flower(flower_id):
+    if flower_id >= len(flower_list):
+        return render_template('lab2/404.html', message="Цветка с таким номером нет"), 404
+    else:
+        flower_list.pop(flower_id)
+        return redirect(url_for('list_flowers'))
+
+
 @lab2.route('/lab2/clear_flowers/')
 def clear_flowers():
-    flower_list.clear() 
-    return f'''
-<!doctype html>
-<html>
-    <body>
-        <h1>Список цветов очищен</h1>
-        <p>Все цветы были удалены из списка;</p>
-        <a href="/lab2/flowers/">Посмотреть все цветы</a>
-    </body>
-</html>
-'''
+    flower_list.clear()  # Очищаем список
+    return render_template('lab2/flowers.html', flower_list=flower_list, flower_count=len(flower_list))
+
+
+@lab2.route('/lab2/add_flower/')
+def add_flower():
+    name = request.args.get('name')
+    price = request.args.get('price')
+    if name and price:
+        flower_list.append({"name": name, "price": price})
+        return render_template('lab2/flowers.html', flower_list=flower_list, flower_count=len(flower_list))
+    return 'Вы не задали имя цветка или его цену', 400
 @lab2.route('/lab2/example')
 def example():
     name, number_lab, group_student, number_course = 'Еремин Захар', 2, 'ФБИ-24', 3
@@ -76,17 +60,17 @@ def example():
         {'name': 'мандарины', 'price': 228},
         {'name': 'манго', 'price': 322}
     ]
-    return render_template('example.html', name=name, number_lab=number_lab,
+    return render_template('lab2/example.html', name=name, number_lab=number_lab,
                            group_student=group_student, number_course=number_course,
                            fruits=fruits)
 @lab2.route('/lab2/')
 def lab2():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
 @lab2.route('/lab2/calc/<int:a>/<int:b>')
 def calc(a, b): 
@@ -128,14 +112,14 @@ books = [
 ]
 @lab2.route('/lab2/books/')
 def book_list():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 cars = [
-    {"title": "Bmw", "description": "M5", "image": "m5.jpg"},
-    {"title": "Bmw", "description": "X6", "image": "x6.jpg"},
-    {"title": "Bmw", "description": "I8", "image": "i8.jpg"},
-    {"title": "Bmw", "description": "M2", "image": "m2.jpg"},
-    {"title": "Bmw", "description": "X1", "image": "x1.jpg"}
+    {"title": "Bmw", "description": "M5", "image": "lab2/m5.jpg"},
+    {"title": "Bmw", "description": "X6", "image": "lab2/x6.jpg"},
+    {"title": "Bmw", "description": "I8", "image": "lab2/i8.jpg"},
+    {"title": "Bmw", "description": "M2", "image": "lab2/m2.jpg"},
+    {"title": "Bmw", "description": "X1", "image": "lab2/x1.jpg"}
 ]
 @lab2.route('/lab2/cars/')
 def cars_list(): 
-    return render_template('cars.html', cars=cars)
+    return render_template('lab2/cars.html', cars=cars)
