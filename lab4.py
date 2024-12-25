@@ -156,3 +156,48 @@ def fridge():
         return render_template('/lab4/fridge.html', message=message, snow=snow)
     # Обработка GET-запроса для загрузки страницы
     return render_template('/lab4/fridge.html', message=None, snow=0)
+grain_prices = {
+    'grechka': 6666,
+    'овёс': 7777,
+    'пшеница': 8888,
+    'рожь': 9999
+}
+@lab4.route('/lab4/grain-order', methods=['GET', 'POST'])
+def grain_order():
+    if request.method == 'POST':
+        grain_type = request.form.get('grain_type')
+        weight = request.form.get('weight')
+        # Проверка, введен ли вес и корректен ли он
+        if not weight:
+            error = "Ошибка: не указан вес"
+            return render_template('/lab4/grain-order.html', error=error)
+        
+        weight = float(weight)
+        if weight <= 0:
+            error = "Ошибка: вес должен быть положительным числом"
+            return render_template('/lab4/grain-order.html', error=error)
+        # Проверка на наличие доступного объема зерна
+        if weight > 500:
+            error = "Ошибка: такого объема сейчас нет в наличии"
+            return render_template('/lab4/grain-order.html', error=error)
+        # Расчет стоимости
+        price_per_ton = grain_prices.get(grain_type)
+        if not price_per_ton:
+            error = "Ошибка: неверный тип зерна"
+            return render_template('/lab4/grain-order.html', error=error)
+        
+        total_cost = weight * price_per_ton
+        discount = 0
+        # Применение скидки за заказ более 50 тонн
+        if weight > 50:
+            discount = 0.1  # 10%
+            total_cost *= (1 - discount)
+        # Формирование сообщения о заказе
+        message = (f"Заказ успешно сформирован. Вы заказали {grain_type}. "
+                   f"Вес: {weight:.2f} т. Сумма к оплате: {total_cost:.2f} руб")
+        
+        if discount > 0:
+            message += f" (применена скидка {int(discount * 100)}% за большой объем)"
+        return render_template('/lab4/grain-order.html', message=message)
+    # GET-запрос для отображения формы заказа
+    return render_template('/lab4/grain-order.html')
