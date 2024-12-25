@@ -1,11 +1,16 @@
 from flask import Blueprint, render_template, request, redirect, session
 lab4 = Blueprint('lab4', __name__)
+
 @lab4.route('/lab4/')
 def lab():
-     return render_template('lab4/lab4.html')
+    return render_template('lab4/lab4.html')
+
+
 @lab4.route('/lab4/div-form')
 def div_form():
     return render_template('lab4/div-form.html')
+
+
 @lab4.route('/lab4/div', methods = ['POST'])
 def div():
     x1 = request.form.get('x1')
@@ -19,9 +24,12 @@ def div():
     result = x1 / x2
     return render_template('lab4/div.html', x1=x1, x2=x2, result=result)
 
+
 @lab4.route('/lab4/slozh-form')
 def slozh_form():
     return render_template('lab4/slozh-form.html')
+
+
 @lab4.route('/lab4/slozh', methods = ['POST'])
 def slozh():
     x1 = request.form.get('x1')
@@ -32,9 +40,13 @@ def slozh():
     x2 = int(x2)
     result = x1 + x2
     return render_template('lab4/slozh.html', x1=x1, x2=x2, result=result)
+
+
 @lab4.route('/lab4/umn-form')
 def umn_form():
     return render_template('lab4/umn-form.html')
+
+
 @lab4.route('/lab4/umn', methods = ['POST'])
 def umn():
     x1 = request.form.get('x1')
@@ -45,9 +57,13 @@ def umn():
     x2 = int(x2)
     result = x1 * x2
     return render_template('lab4/umn.html', x1=x1, x2=x2, result=result)
+
+
 @lab4.route('/lab4/diff-form')
 def diff_form():
     return render_template('lab4/diff-form.html')
+
+
 @lab4.route('/lab4/diff', methods = ['POST'])
 def diff():
     x1 = request.form.get('x1')
@@ -58,9 +74,13 @@ def diff():
     x2 = int(x2)
     result = x1 - x2
     return render_template('lab4/diff.html', x1=x1, x2=x2, result=result)
+
+
 @lab4.route('/lab4/step-form')
 def step_form():
     return render_template('lab4/step-form.html')
+
+
 @lab4.route('/lab4/step', methods = ['POST'])
 def step():
     x1 = request.form.get('x1')
@@ -74,7 +94,10 @@ def step():
         return render_template('lab4/step.html', x1=x1, x2=x2, result=result)
     return render_template('lab4/step.html', error='Оба поля равны нулю!')
 
+
 tree_count = 0
+
+
 @lab4.route('/lab4/tree', methods = ['GET', 'POST'])
 def tree():
     global tree_count
@@ -82,18 +105,23 @@ def tree():
         return render_template('lab4/tree.html', tree_count=tree_count)
     
     operation = request.form.get('operation')
+
     if operation == 'cut':
         if tree_count > 0:
             tree_count -= 1
     elif operation == 'plant':
         tree_count += 1
+
     return redirect('/lab4/tree')
+
+
 users = [
-    {'login': 'alex', 'password': '123', 'name': 'Alex charls', 'gender': 'male'},
-    {'login': 'bob', 'password': '777', 'name': 'Bob boboev', 'gender': 'male'},
-    {'login': 'mila', 'password': 'faaaak', 'name': 'Mila pchelenok', 'gender': 'female'},
-    {'login': 'george', 'password': '666', 'name': 'George vashington', 'gender': 'male'},
+    {'login': 'alex', 'password': '123', 'name': 'Alex Levy', 'gender': 'male'},
+    {'login': 'bob', 'password': '555', 'name': 'Bob Charlton', 'gender': 'male'},
+    {'login': 'mila', 'password': 'fffddd', 'name': 'Mila Kunis', 'gender': 'female'},
+    {'login': 'george', 'password': '135', 'name': 'George Bush', 'gender': 'male'},
 ]
+
 
 @lab4.route('/lab4/login', methods = ['GET', 'POST'])
 def login():
@@ -105,25 +133,100 @@ def login():
             authorized=False
             name = ''
         return render_template('lab4/login.html', authorized=authorized, name=name)
+
     login = request.form.get('login')
     password = request.form.get('password')
+
     if not login:
         error = 'Не введён логин'
         return render_template('lab4/login.html', error=error, authorized=False, login=login)
     elif not password:
         error = 'Не введён пароль'
         return render_template('lab4/login.html', error=error, authorized=False, login=login)
+
     for user in users:
         if login == user['login'] and password == user['password']:
             session['login'] = login
             session['name'] = user['name']
             return redirect('/lab4/login')
+
     error = 'Неверные логин и/или пароль'
     return render_template('lab4/login.html', error=error, authorized=False, login=login)
+
+
 @lab4.route('/lab4/logout', methods = ['POST'])
 def logout():
     session.pop('login', None)
     return redirect('/lab4/login')
+
+
+@lab4.route('/lab4/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('lab4/register.html')
+
+    login = request.form.get('login')
+    password = request.form.get('password')
+    name = request.form.get('name')
+    gender = request.form.get('gender')
+
+    if not login or not password or not name or not gender:
+        error = 'Все поля обязательны для заполнения.'
+        return render_template('lab4/register.html', error=error)
+
+    # Проверка, что логин уникален
+    for user in users:
+        if user['login'] == login:
+            error = 'Логин уже занят.'
+            return render_template('lab4/register.html', error=error)
+
+    # Добавление нового пользователя
+    users.append({'login': login, 'password': password, 'name': name, 'gender': gender})
+    return redirect('/lab4/login')
+
+
+@lab4.route('/lab4/users')
+def users_list():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    return render_template('lab4/users.html', users=users, current_user=session['login'])
+
+
+@lab4.route('/lab4/delete_user', methods=['POST'])
+def delete_user():
+    login_to_delete = request.form.get('login')
+    if 'login' in session and session['login'] == login_to_delete:
+        global users
+        users = [user for user in users if user['login'] != login_to_delete]
+        session.pop('login', None)
+    return redirect('/lab4/login')
+
+
+@lab4.route('/lab4/edit_user', methods=['GET', 'POST'])
+def edit_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+
+    login = session['login']
+    user = next((user for user in users if user['login'] == login), None)
+
+    if request.method == 'GET':
+        return render_template('lab4/edit_user.html', user=user)
+
+    # Получаем новые данные
+    new_name = request.form.get('name')
+    new_password = request.form.get('password')
+
+    # Обновление данных
+    if new_name:
+        user['name'] = new_name
+    if new_password:
+        user['password'] = new_password
+
+    return redirect('/lab4/users')
+
+
 @lab4.route('/lab4/fridge', methods=['GET', 'POST'])
 def fridge():
     if request.method == 'POST':
@@ -153,20 +256,27 @@ def fridge():
             elif -4 <= temperature <= -1:
                 message = f"Установлена температура: {temperature}°С"
                 snow = 1
+
         return render_template('/lab4/fridge.html', message=message, snow=snow)
+
     # Обработка GET-запроса для загрузки страницы
     return render_template('/lab4/fridge.html', message=None, snow=0)
+
+
+# Цены на зерно в рублях за тонну
 grain_prices = {
-    'grechka': 6666,
-    'овёс': 7777,
-    'пшеница': 8888,
-    'рожь': 9999
+    'ячмень': 12345,
+    'овёс': 8522,
+    'пшеница': 8722,
+    'рожь': 14111
 }
+
 @lab4.route('/lab4/grain-order', methods=['GET', 'POST'])
 def grain_order():
     if request.method == 'POST':
         grain_type = request.form.get('grain_type')
         weight = request.form.get('weight')
+
         # Проверка, введен ли вес и корректен ли он
         if not weight:
             error = "Ошибка: не указан вес"
@@ -176,10 +286,12 @@ def grain_order():
         if weight <= 0:
             error = "Ошибка: вес должен быть положительным числом"
             return render_template('/lab4/grain-order.html', error=error)
+
         # Проверка на наличие доступного объема зерна
         if weight > 500:
             error = "Ошибка: такого объема сейчас нет в наличии"
             return render_template('/lab4/grain-order.html', error=error)
+
         # Расчет стоимости
         price_per_ton = grain_prices.get(grain_type)
         if not price_per_ton:
@@ -188,16 +300,20 @@ def grain_order():
         
         total_cost = weight * price_per_ton
         discount = 0
+
         # Применение скидки за заказ более 50 тонн
         if weight > 50:
             discount = 0.1  # 10%
             total_cost *= (1 - discount)
+
         # Формирование сообщения о заказе
         message = (f"Заказ успешно сформирован. Вы заказали {grain_type}. "
                    f"Вес: {weight:.2f} т. Сумма к оплате: {total_cost:.2f} руб")
         
         if discount > 0:
             message += f" (применена скидка {int(discount * 100)}% за большой объем)"
+
         return render_template('/lab4/grain-order.html', message=message)
+
     # GET-запрос для отображения формы заказа
     return render_template('/lab4/grain-order.html')
