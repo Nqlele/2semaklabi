@@ -1,26 +1,19 @@
-{% extends "base.html" %}
-{% block lab %}Лабораторная работа 5{% endblock %}
-{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+</head>
+<body>
     <h1>Регистрация</h1>
-    <form action="/lab5/register" method="post">
-        <div>
-            <label>
-                Логин: <input type="text" name="login">
-            </label>
-        </div>
-        <div>
-            <label>
-                Пароль: <input type="password" name="password">
-            </label>
-        </div>
-        {% if error %}
-        <div  style="color: red; font-style: italic; font-weight: bold;">
-            {{ error }}
-        </div>
-        {% endif %}
+    <form method="POST">
+        <label>Логин: <input type="text" name="login"></label><br>
+        <label>Пароль: <input type="password" name="password"></label><br>
         <button type="submit">Зарегистрироваться</button>
     </form>
-{% endblock %}
-{% block style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='lab5/lab5.css') }}">
-{% endblock %}
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

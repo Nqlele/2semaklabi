@@ -79,7 +79,7 @@ def login():
         return render_template('lab5/login.html',
                                error='Логин и/или пароль неверны')
     
-    session['user_id'] = user['id']
+    session['login'] = login
     db_close(conn, cur)
     return render_template('lab5/success_login.html', login=login)
 @lab5.route('/lab5/create', methods = ['GET', 'POST'])
