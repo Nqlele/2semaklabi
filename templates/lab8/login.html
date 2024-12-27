@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block lab %}Лабораторная работа 8{% endblock %}
 {% block main %}
-    <h1>Регистрация</h1>
-    <form action="/lab8/register" method="post">
+    <h1>Вход в систему</h1>
+    <form action="/lab8/login" method="post">
         <div>
             <label>
                 Логин: <input type="text" name="login">
@@ -14,11 +14,11 @@
             </label>
         </div>
         {% if error %}
-        <div  style="color: rgb(18, 192, 140); font-style: italic; font-weight: bold;">
+        <div  style="color: red; font-style: italic; font-weight: bold;">
             {{ error }}
         </div>
-        {% endif %}g
-        <button type="submit">Зарегистрироваться</button>
+        {% endif %}
+        <button type="submit">Вход</button>
     </form>
 {% endblock %}
 {% block style %}
