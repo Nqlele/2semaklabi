@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
-from flask_login import login_required, current_user
 lab9 = Blueprint('lab9', __name__)
 @lab9.route('/lab9/')
 def lab():
@@ -52,18 +51,18 @@ def result():
             greeting = f"Поздравляю вас, {name}, желаю счастья, терпения и кэша!"
         else:
             greeting = f"Поздравляю вас, {name}, желаю счастья, терпения и кэша!"
-    if preference1 == 'tasty':
-        if preference2 == 'sweet':
+    if preference1 == 'rich':
+        if preference2 == 'very rich':
             image = 'dolar.jpg'
             gift = "Вот тебе подарок — двой $$$!"
         else:
             image = 'euro.jpg'
             gift = "Вот тебе подарок — tvoe EURO!"
     else:
-        if preference2 == 'decor':
+        if preference2 == 'super rich':
             image = 'rubl.jpg'
             gift = "Вот тебе подарок — твои раблс!"
         else:
-            image = 'con2.avif'
+            image = 'con2.jpg'
             gift = "Вот тебе подарок — твой конь!"
     return render_template('lab9/result.html', greeting=greeting, image=image, gift=gift)
