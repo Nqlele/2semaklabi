@@ -52,7 +52,7 @@ def result():
         else:
             greeting = f"Поздравляю вас, {name}, желаю счастья, терпения и кэша!"
     if preference1 == 'rich':
-        if preference2 == 'very rich':
+        if preference2 == 'dolar':
             image = 'dolar.jpg'
             gift = "Вот тебе подарок — двой $$$!"
         else:
