@@ -6,6 +6,7 @@ from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
 from lab6 import lab6  # Импортируем Blueprint для lab6
+from lab9 import lab9
 
 app = Flask(__name__)
 
@@ -17,7 +18,8 @@ app.register_blueprint(lab2)
 app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 app.register_blueprint(lab5)
-app.register_blueprint(lab6)  # Регистрируем Blueprint для lab6
+app.register_blueprint(lab6)
+app.register_blueprint(lab9)
 
 @app.route("/")
 @app.route("/index")
@@ -66,6 +68,9 @@ def menu():
                     <li>
                         <a href="/lab6">Шестая лабораторная</a>
                     </li>
+                     <div>
+                        <a href='/lab9'>Лабораторная работа 9</a>
+                    </div>
                 </ol>
             </div>
         </main>

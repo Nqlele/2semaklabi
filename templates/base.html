@@ -1,33 +1,38 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='lab1/main.css')}}">
+    <link rel="icon" href="{{ url_for('static', filename='lab2/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" sizes="32x32" href="{{ url_for('static', filename='lab2/favicon-32x32.png') }}">
+    <link rel="icon" sizes="16x16" href="{{ url_for('static', filename='lab2/favicon-16x16.png') }}">
     <title>Еремин Захар. {% block lab %}{% endblock %}</title>
-    {% block style %}{% endblock %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon-16x16.png') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <style>
-        body {
-            color: black; /* Цвет текста по умолчанию */
-            background-color: white; /* Цвет фона по умолчанию */
-            font-size: 16px; /* Размер шрифта по умолчанию */
-            text-align: left; /* Выравнивание текста по умолчанию */
+        body{
+            {% if request.cookies.get('color')%}
+            color: {{ request.cookies.get('color')}};
+            {% endif %}
+
+            {% if request.cookies.get('font_size')%}
+            font-size: {{ request.cookies.get('font_size') }}px;
+            {% endif %}
+            
+            {% if request.cookies.get('background_color')%}
+            background-color: {{ request.cookies.get('background_color') }};
+            {% endif %}
         }
     </style>
-    {% block script %}{% endblock %}
+    {% block script %} {% endblock %}
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. {{ self.lab() }}
+        WEB-программирование, часть 2. {{self.lab()}}
+        <a href="{{url_for('menu')}}">Меню</a>
     </header>
     <main>
         {% block main %}{% endblock %}
-        <div class="ssilka"><a href="/">Перейти в «Главное меню»</a></div>
     </main>
-    
     <footer>
         &copy; Еремин Захар, ФБИ-24, 3 курс, 2024
     </footer>
