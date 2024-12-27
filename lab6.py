@@ -5,7 +5,7 @@ def lab():
     return render_template('lab6/lab6.html')
 offices = []
 for i in range(1, 11):
-    offices.append({"number": i, "tenant": ""})
+    offices.append({"number": i, "tenant": "", "price": 730 + i**2})
 @lab6.route('/lab6/')
 def lab():
     return render_template('lab6/lab6.html')
@@ -30,6 +30,14 @@ def api():
             },
             'id': id
         }
+    if data['method'] == 'get_total_price':
+        total_price = sum(office['price'] for office in offices if office['tenant'] == login)
+        return {
+            'jsonrpc': '2.0',
+            'result': total_price,
+            'id': id
+        }
+
     if data['method'] == 'booking':
         office_number = data['params']
         for office in offices:
