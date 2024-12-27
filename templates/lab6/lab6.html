@@ -2,98 +2,249 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Лабораторная работа 6</title>
-    <script>
-        function getOfficeList() {
-            const url = '/lab6/json-rpc-api/';
-            const json = {
-                'jsonrpc': '2.0',
-                'method': 'info',
-                'id': Math.round(Math.random() * 1000)
-            };
-            fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(json)
-            })
-            .then(response => response.json())
-            .then(data => {
-                const officeList = document.getElementById('office-list');
-                officeList.innerHTML = '';
-                let totalPrice = 0;
-                data.result.forEach(office => {
-                    const li = document.createElement('li');
-                    li.innerText = `Кабинет №${office.number}: ${office.tenant || 'свободен'} (Цена: ${office.price} руб.)`;
-                    if (!office.tenant) {
-                        const bookButton = document.createElement('button');
-                        bookButton.innerText = 'Забронировать';
-                        bookButton.onclick = () => booking(office.number);
-                        li.appendChild(bookButton);
-                    } else if (office.tenant === '{{ session.get("login") }}') {
-                        const cancelButton = document.createElement('button');
-                        cancelButton.innerText = 'Освободить';
-                        cancelButton.onclick = () => cancellation(office.number);
-                        li.appendChild(cancelButton);
-                        totalPrice += office.price;
-                    }
-                    officeList.appendChild(li);
-                });
-                document.getElementById('total-price').innerText = `Общая стоимость аренды: ${totalPrice} руб.`;
-            });
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аренда кабинетов</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        function booking(officeNumber) {
-            const url = '/lab6/json-rpc-api/';
-            const json = {
-                'jsonrpc': '2.0',
-                'method': 'booking',
-                'params': officeNumber,
-                'id': Math.round(Math.random() * 1000)
-            };
-            fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(json)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error.message);
-                } else {
-                    getOfficeList();
-                }
-            });
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
         }
 
-        function cancellation(officeNumber) {
-            const url = '/lab6/json-rpc-api/';
-            const json = {
-                'jsonrpc': '2.0',
-                'method': 'cancellation',
-                'params': officeNumber,
-                'id': Math.round(Math.random() * 1000)
-            };
-            fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(json)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error.message);
-                } else {
-                    getOfficeList();
-                }
-            });
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
         }
 
-        document.addEventListener('DOMContentLoaded', getOfficeList);
-    </script>
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background: #ffffff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .office-info {
+            flex-grow: 1;
+        }
+
+        .office-number {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .office-status {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        button.book {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button.book:hover {
+            background-color: #218838;
+        }
+
+        button.cancel {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        button.cancel:hover {
+            background-color: #c82333;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        button:active {
+            animation: pulse 0.3s;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Стиль для кнопки "Выход в главное меню" */
+        .menu-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .menu-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Стиль для общей стоимости */
+        .total-cost {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Лабораторная работа 6: Аренда офисов</h1>
-    <ul id="office-list"></ul>
-    <p id="total-price"></p>
+    <div class="container">
+        <h1>Аренда кабинетов</h1>
+        <ul id="office-list">
+            <!-- Кабинеты будут добавлены с помощью JavaScript -->
+        </ul>
+        <!-- Общая стоимость арендованных кабинетов -->
+        <div class="total-cost" id="total-cost">
+            Общая стоимость аренды: 0 руб.
+        </div>
+        <!-- Кнопка для выхода в главное меню -->
+        <a href="/menu" class="menu-button">Выход в главное меню</a>
+        <footer>
+            © 2024 Аренда кабинетов. Сделано с ❤️ для вас.
+        </footer>
+    </div>
+
+    <script>
+        // Данные о кабинетах
+        let offices = [
+            { number: 1, tenant: "", price: 1000 },
+            { number: 2, tenant: "", price: 1200 },
+            { number: 3, tenant: "", price: 1500 },
+            { number: 4, tenant: "", price: 1000 },
+            { number: 5, tenant: "", price: 1300 }
+        ];
+
+        // Функция для подсчёта общей стоимости арендованных кабинетов
+        function calculateTotalCost() {
+            let total = 0;
+            offices.forEach(office => {
+                if (office.tenant) {
+                    total += office.price;
+                }
+            });
+            return total;
+        }
+
+        // Функция для отображения кабинетов
+        function renderOffices() {
+            const officeList = document.getElementById('office-list');
+            officeList.innerHTML = ''; // Очищаем список
+
+            offices.forEach(office => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="office-info">
+                        <span class="office-number">Кабинет №${office.number}</span>
+                        <span class="office-status">${office.tenant ? `Забронирован (${office.tenant})` : 'Свободен'} - ${office.price} руб.</span>
+                    </div>
+                `;
+
+                // Кнопка для бронирования/освобождения
+                const button = document.createElement('button');
+                if (office.tenant) {
+                    button.innerText = 'Освободить';
+                    button.className = 'cancel';
+                    button.onclick = () => cancelBooking(office.number);
+                } else {
+                    button.innerText = 'Забронировать';
+                    button.className = 'book';
+                    button.onclick = () => bookOffice(office.number);
+                }
+
+                li.appendChild(button);
+                officeList.appendChild(li);
+            });
+
+            // Обновляем общую стоимость
+            const totalCostElement = document.getElementById('total-cost');
+            totalCostElement.innerText = `Общая стоимость аренды: ${calculateTotalCost()} руб.`;
+        }
+
+        // Функция для бронирования кабинета
+        function bookOffice(officeNumber) {
+            const tenant = prompt("Введите ваше имя для бронирования:");
+            if (tenant) {
+                const office = offices.find(o => o.number === officeNumber);
+                if (office) {
+                    office.tenant = tenant;
+                    renderOffices(); // Обновляем список
+                }
+            }
+        }
+
+        // Функция для освобождения кабинета
+        function cancelBooking(officeNumber) {
+            const office = offices.find(o => o.number === officeNumber);
+            if (office) {
+                office.tenant = "";
+                renderOffices(); // Обновляем список
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', renderOffices);
+    </script>
 </body>
 </html>

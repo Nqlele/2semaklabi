@@ -5,7 +5,8 @@ from lab2 import lab2
 from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
-from lab6 import lab6
+from lab6 import lab6  # Импортируем Blueprint для lab6
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '666')
@@ -16,18 +17,20 @@ app.register_blueprint(lab2)
 app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 app.register_blueprint(lab5)
-app.register_blueprint(lab6)
+app.register_blueprint(lab6)  # Регистрируем Blueprint для lab6
 
 @app.route("/")
 @app.route("/index")
 def start():
     return redirect("/menu", code=302)
+
 @app.errorhandler(404)
 def not_found(err):
-    return "нет такой страницы", 404
+    return "Нет такой страницы", 404
+
 @app.errorhandler(500)
 def server_error(err):
-    return "ошибка сервера", 500
+    return "Ошибка сервера", 500
 
 @app.route("/menu")
 def menu():
@@ -48,7 +51,7 @@ def menu():
                     <li>
                         <a href="/lab1">Первая лабораторная</a>
                     </li>
-                      <li>
+                    <li>
                         <a href="/lab2">Вторая лабораторная</a>
                     </li>
                     <li>
@@ -57,10 +60,10 @@ def menu():
                     <li>
                         <a href="/lab4">Четвертая лабораторная</a>
                     </li>
-                     <li>
+                    <li>
                         <a href="/lab5">Пятая лабораторная</a>
                     </li>
-                     <li>
+                    <li>
                         <a href="/lab6">Шестая лабораторная</a>
                     </li>
                 </ol>
@@ -73,3 +76,6 @@ def menu():
     </body>
 </html>
 """
+
+if __name__ == "__main__":
+    app.run(debug=True)

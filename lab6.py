@@ -1,13 +1,11 @@
 from flask import Blueprint, render_template, request, session, jsonify
-
+# Создаём Blueprint для lab6
 lab6_bp = Blueprint('lab6', __name__)
 
-# Глобальный список офисов
-offices = [{"number": i, "tenant": "", "price": 1000} for i in range(1, 11)]
-
 @lab6_bp.route('/lab6/')
-def lab6():
+def lab6_page():
     return render_template('lab6/lab6.html')
+lab6_bp = Blueprint('lab6', __name__)
 
 @lab6_bp.route('/lab6/json-rpc-api/', methods=['POST'])
 def api():
